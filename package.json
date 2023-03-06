@@ -1,10 +1,11 @@
 {
-  "name": "back-end",
+  "name": "inge-heeringa-final-project-back-202301-bcn",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "npx serve"
+    "start": "npx serve",
+    "prepare": "husky install"
   },
   "repository": {
     "type": "git",
@@ -16,5 +17,8 @@
   "bugs": {
     "url": "https://github.com/isdi-coders-2023/Inge-Heeringa-Final-Project-back-202301-bcn/issues"
   },
-  "homepage": "https://github.com/isdi-coders-2023/Inge-Heeringa-Final-Project-back-202301-bcn#readme"
+  "homepage": "https://github.com/isdi-coders-2023/Inge-Heeringa-Final-Project-back-202301-bcn#readme",
+  "devDependencies": {
+    "husky": "^8.0.0"
+  }
 }
