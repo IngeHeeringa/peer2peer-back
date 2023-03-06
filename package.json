@@ -5,8 +5,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "jest --passWithNoTests",
-    "test:coverage": "jest --coverage --watchAll=false --passWithNoTests",
+    "test": "jest",
+    "test:coverage": "jest --coverage --watchAll=false",
     "start": "node dist",
     "build": "npx tsc",
     "build:dev": "npx tsc -w",
