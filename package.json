@@ -4,7 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "npx serve",
+    "test": "jest --passWithNoTests",
+    "test:coverage": "jest --coverage --watchAll=false --passWithNoTests",
+    "start": "node dist",
+    "build": "npx tsc",
+    "build:dev": "npx tsc -w",
     "prepare": "husky install"
   },
   "repository": {
