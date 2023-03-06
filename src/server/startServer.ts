@@ -1,4 +1,3 @@
-import debug from "debug";
 import { type CustomError } from "../CustomError/CustomError.js";
 import { app } from "./index.js";
 
