@@ -1,4 +1,4 @@
-import "./loadEnvironment.js";
+import "../loadEnvironment.js";
 import type cors from "cors";
 
 const allowedOrigins = [
