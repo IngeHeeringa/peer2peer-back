@@ -1,0 +1,101 @@
+import mongoose from "mongoose";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
+import { MongoMemoryServer } from "mongodb-memory-server";
+import request from "supertest";
+import User from "../../database/models/User";
+import connectDatabase from "../../database/connectDatabase";
+import { app } from "..";
+import { type UserData, type UserCredentials } from "../../database/types";
+
+let server: MongoMemoryServer;
+
+beforeAll(async () => {
+  server = await MongoMemoryServer.create();
+  await connectDatabase(server.getUri());
+});
+
+afterAll(async () => {
+  await mongoose.connection.close();
+  await server.stop();
+});
+
+afterEach(async () => {
+  await User.deleteMany();
+});
+
+const userData: UserData = {
+  username: "user",
+  email: "mock@user.com",
+  password: "12345678",
+  avatar: "",
+  backupAvatar: "",
+};
+
+const userCredentials: UserCredentials = {
+  email: userData.email,
+  password: userData.password,
+};
+
+describe("Given a POST '/users/login' endpoint", () => {
+  describe("When it receives a request with email 'mock@user.com' and password '12345678'", () => {
+    beforeAll(async () => {
+      await User.create(userData);
+    });
+
+    test("Then it should respond with status code 200 and a token", async () => {
+      const endpoint = "/users/login";
+      const expectedStatusCode = 200;
+      const expectedProperty = "token";
+      jwt.sign = jest.fn().mockReturnValue({
+        token: "abc",
+      });
+      bcrypt.compare = jest.fn().mockResolvedValueOnce(true);
+
+      const response = await request(app)
+        .post(endpoint)
+        .send(userCredentials)
+        .expect(expectedStatusCode);
+
+      expect(response.body).toHaveProperty(expectedProperty);
+    });
+  });
+
+  describe("When it receives a request with email 'mock@user.com' and wrong password '87654321'", () => {
+    beforeAll(async () => {
+      await User.create(userData);
+    });
+
+    test("Then it should respond with status code 401 and error message 'Wrong credentials'", async () => {
+      const userCredentialsWrongPassword: UserCredentials = {
+        email: "mock@user.com",
+        password: "87654321",
+      };
+      const endpoint = "/users/login";
+      const expectedStatusCode = 401;
+      const expectedErrorMessage = { error: "Wrong credentials" };
+
+      const response = await request(app)
+        .post(endpoint)
+        .send(userCredentialsWrongPassword)
+        .expect(expectedStatusCode);
+
+      expect(response.body).toStrictEqual(expectedErrorMessage);
+    });
+  });
+
+  describe("When it receives a request with an email from a user that doesn't exist in the database", () => {
+    test("Then it should respond with status code 401 and error message 'Wrong credentials'", async () => {
+      const endpoint = "/users/login";
+      const expectedStatusCode = 401;
+      const expectedErrorMessage = { error: "Wrong credentials" };
+
+      const response = await request(app)
+        .post(endpoint)
+        .send(userCredentials)
+        .expect(expectedStatusCode);
+
+      expect(response.body).toStrictEqual(expectedErrorMessage);
+    });
+  });
+});
