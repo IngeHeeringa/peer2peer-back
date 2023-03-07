@@ -7,11 +7,11 @@ module.exports = {
   collectCoverage: true,
   collectCoverageFrom: [
     "src/**/*.ts",
-    "src/cors.ts",
+    "!src/cors.ts",
     "!src/index.ts",
     "!src/server/index.ts",
     "!src/server/startServer.ts",
     "!src/loadEnvironment.ts",
-    "!src/database/connectDataBase.ts",
+    "!src/database/connectDatabase.ts",
   ],
 };

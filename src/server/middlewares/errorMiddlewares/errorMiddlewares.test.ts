@@ -1,8 +1,10 @@
 import { type Response } from "express";
 import { CustomError } from "../../../CustomError/CustomError.js";
-
-import { mockNext, mockRequest, mockResponse } from "../../../mocks/mocks.js";
-
+import {
+  mockNext,
+  mockRequest,
+  mockResponse,
+} from "../../../mocks/errorMocks.js";
 import { generalError, notFoundError } from "./errorMiddlewares.js";
 
 describe("Given a notFoundError middleware", () => {

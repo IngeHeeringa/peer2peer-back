@@ -3,41 +3,61 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../../database/models/User.js";
 import { CustomError } from "../../CustomError/CustomError.js";
-import { type UserCredentialsStructure } from "../../database/types.js";
-
+import { type UserCredentials } from "../../database/types.js";
 const loginUser = async (
   req: Request<
     Record<string, unknown>,
     Record<string, unknown>,
-    UserCredentialsStructure
+    UserCredentials
   >,
   res: Response,
   next: NextFunction
 ) => {
-  const { username, password } = req.body;
+  try {
+    const { email, password } = req.body;
 
-  const user = await User.findOne({ username }).exec();
+    const user = await User.findOne({ email }).exec();
 
-  if (!user || !(await bcrypt.compare(password, user.password))) {
-    const authError = new CustomError(
-      "Wrong credentials",
-      401,
-      "Wrong credentials"
+    if (!user) {
+      const authError = new CustomError(
+        "User does not exist",
+        401,
+        "Wrong credentials"
+      );
+
+      next(authError);
+      return;
+    }
+
+    if (!(await bcrypt.compare(password, user.password))) {
+      const authError = new CustomError(
+        "Wrong password",
+        401,
+        "Wrong credentials"
+      );
+
+      next(authError);
+      return;
+    }
+
+    const jwtPayload = {
+      sub: user?._id,
+    };
+
+    const token = jwt.sign(jwtPayload, process.env.JWT_SECRET!, {
+      expiresIn: "1d",
+    });
+
+    res.status(200).json({ token });
+  } catch (error: unknown) {
+    const customError = new CustomError(
+      (error as Error).message,
+      500,
+      "Internal server error"
     );
 
-    next(authError);
+    next(customError);
   }
-
-  const jwtPayload = {
-    sub: user?._id,
-    username,
-  };
-
-  const token = jwt.sign(jwtPayload, process.env.JWT_SECRET!, {
-    expiresIn: "1d",
-  });
-
-  res.status(200).json({ token });
 };
 
 export default loginUser;
