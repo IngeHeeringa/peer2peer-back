@@ -6,7 +6,7 @@ import connectDatabase from "./database/connectDatabase.js";
 const port: string | number = process.env.PORT ?? 4000;
 const mongoDbConnectionUrl: string = process.env.MONGODB_CONNECTION_URL!;
 
-const debug = createDebug("server:root");
+const debug = createDebug("peer2peer-api:root");
 
 try {
   await startServer(+port);
