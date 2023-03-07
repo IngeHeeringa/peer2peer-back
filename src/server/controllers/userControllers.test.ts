@@ -12,7 +12,7 @@ beforeEach(() => jest.clearAllMocks());
 describe("Given a loginUser controller", () => {
   const userCredentials: UserCredentials = {
     email: "mock@user.com",
-    password: "123",
+    password: "12345678",
   };
   mockRequest.body = userCredentials;
 

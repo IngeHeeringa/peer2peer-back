@@ -3,15 +3,19 @@ import { model, Schema } from "mongoose";
 const userSchema = new Schema({
   username: {
     type: String,
+    trim: true,
     required: true,
     unique: true,
   },
   password: {
     type: String,
+    minLength: 8,
+    maxLength: 20,
     required: true,
   },
   email: {
     type: String,
+    trim: true,
     required: true,
     unique: true,
   },
