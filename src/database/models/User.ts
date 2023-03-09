@@ -1,6 +1,6 @@
 import { model, Schema } from "mongoose";
 
-const userSchema = new Schema({
+export const userSchema = new Schema({
   username: {
     type: String,
     trim: true,
@@ -24,14 +24,6 @@ const userSchema = new Schema({
   },
   backupAvatar: {
     type: String,
-  },
-});
-
-userSchema.set("toJSON", {
-  virtuals: true,
-  versionKey: false,
-  transform(doc, ret) {
-    delete ret._id;
   },
 });
 
