@@ -13,7 +13,7 @@ export const app = express();
 app.disable("x-powered-by");
 
 app.use(morgan("dev"));
-app.use(cors(options));
+app.use(cors());
 app.use(express.json());
 
 app.use("/users", usersRouter);
