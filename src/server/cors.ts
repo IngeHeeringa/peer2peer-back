@@ -3,6 +3,7 @@ import type cors from "cors";
 
 const allowedOrigins = [
   "http://localhost:4000",
+  "http://localhost:4200/",
   process.env.DEPLOY_ORIGIN_URL!,
 ];
 
