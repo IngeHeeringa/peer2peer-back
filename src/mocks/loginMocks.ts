@@ -1,4 +1,4 @@
-import { type Request, type Response, type NextFunction } from "express";
+import { type Request, type Response } from "express";
 import { type UserCredentials } from "../database/types";
 
 export const mockLoginRequest = {} as Request<
