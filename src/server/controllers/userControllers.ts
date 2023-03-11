@@ -42,13 +42,14 @@ const loginUser = async (
 
     const jwtPayload = {
       sub: user?._id,
+      email: user?.email,
     };
 
     const token = jwt.sign(jwtPayload, process.env.JWT_SECRET!, {
       expiresIn: "1d",
     });
 
-    res.status(200).json({ token });
+    res.status(200).json({ email, token });
   } catch (error: unknown) {
     const customError = new CustomError(
       (error as Error).message,

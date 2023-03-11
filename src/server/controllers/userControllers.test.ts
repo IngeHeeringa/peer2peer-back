@@ -34,7 +34,7 @@ describe("Given a loginUser controller", () => {
     });
 
     test("Then it should call the response's JSON method with a token", async () => {
-      const expectedResponseBody = { token: "abc" };
+      const expectedResponseBody = { email: "mock@user.com", token: "abc" };
 
       User.findOne = jest.fn().mockImplementationOnce(() => ({
         exec: jest.fn().mockReturnValue(userCredentials),
