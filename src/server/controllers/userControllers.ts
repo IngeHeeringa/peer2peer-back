@@ -3,8 +3,9 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../../database/models/User.js";
 import { CustomError } from "../../CustomError/CustomError.js";
-import { type UserCredentials } from "../../database/types.js";
-const loginUser = async (
+import { type UserData, type UserCredentials } from "../../database/types.js";
+
+export const loginUser = async (
   req: Request<
     Record<string, unknown>,
     Record<string, unknown>,
@@ -61,4 +62,32 @@ const loginUser = async (
   }
 };
 
-export default loginUser;
+export const registerUser = async (
+  req: Request<Record<string, unknown>, Record<string, unknown>, UserData>,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { username, password, email } = req.body;
+
+    const hashedPassword = await bcrypt.hash(password, 8);
+
+    await User.create({
+      username,
+      password: hashedPassword,
+      email,
+    });
+
+    const message = "User registered successfully";
+
+    res.status(201).json({ message });
+  } catch (error) {
+    const customError = new CustomError(
+      (error as Error).message,
+      500,
+      "Couldn't register the user"
+    );
+
+    next(customError);
+  }
+};

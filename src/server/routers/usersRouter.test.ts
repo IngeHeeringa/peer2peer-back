@@ -28,8 +28,6 @@ const userData: UserData = {
   username: "user",
   email: "mock@user.com",
   password: "12345678",
-  avatar: "",
-  backupAvatar: "",
 };
 
 const userCredentials: UserCredentials = {

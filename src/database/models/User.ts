@@ -16,14 +16,7 @@ export const userSchema = new Schema({
   password: {
     type: String,
     minLength: 8,
-    maxLength: 20,
     required: true,
-  },
-  avatar: {
-    type: String,
-  },
-  backupAvatar: {
-    type: String,
   },
 });
 
