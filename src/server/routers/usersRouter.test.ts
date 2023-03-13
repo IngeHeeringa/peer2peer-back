@@ -101,7 +101,7 @@ describe("Given a POST '/users/login' endpoint", () => {
 describe("Given a POST '/users/register' endpoint", () => {
   const endpoint = "/users/register";
 
-  describe("When it receives a request with username 'user', password '12345678', avatar 'image.png' and email 'user@user.com'", () => {
+  describe("When it receives a request with username 'user', password '12345678' and email 'user@user.com'", () => {
     test("Then the response body should include the username 'User' and the message 'User registered successfully'", async () => {
       const expectedStatusCode = 201;
       const expectedResponseBody = {
