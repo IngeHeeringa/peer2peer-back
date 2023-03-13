@@ -1,6 +1,6 @@
 import { type NextFunction, type Request, type Response } from "express";
-import { CustomError } from "../../CustomError/CustomError";
-import Post from "../../database/models/Post";
+import { CustomError } from "../../CustomError/CustomError.js";
+import Post from "../../database/models/Post.js";
 
 export const getPosts = async (
   req: Request,
