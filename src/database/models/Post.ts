@@ -29,10 +29,6 @@ export const postSchema = new Schema({
     type: String,
     required: true,
   },
-  username: {
-    type: String,
-    required: true,
-  },
 });
 
 export const Post = model("Post", postSchema, "posts");

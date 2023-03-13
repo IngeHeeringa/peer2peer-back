@@ -1,6 +1,6 @@
 import { type Response, type NextFunction } from "express";
-import Post from "../../database/models/Post";
-import { mockPostRequest, mockPostResponse } from "../../mocks/postMocks";
+import Post from "../../../database/models/Post";
+import { mockPostRequest, mockPostResponse } from "../../../mocks/postMocks";
 import { getPosts } from "./postsController";
 
 export const mockNext = jest.fn() as NextFunction;
