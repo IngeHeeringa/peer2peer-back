@@ -7,6 +7,7 @@ import {
   notFoundError,
 } from "./middlewares/errorMiddlewares/errorMiddlewares.js";
 import usersRouter from "./routers/usersRouter/usersRouter.js";
+import postsRouter from "./routers/postsRouter/postsRouter.js";
 
 export const app = express();
 
@@ -17,6 +18,7 @@ app.use(cors(options));
 app.use(express.json());
 
 app.use("/users", usersRouter);
+app.use("/", postsRouter);
 
 app.use(notFoundError);
 app.use(generalError);
