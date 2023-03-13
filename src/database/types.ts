@@ -9,10 +9,16 @@ export interface PostData {
   image: string;
   shortDescription: string;
   fullDescription: string;
-  stack: string;
+  stack: Stack;
   technologies: string[];
   yearsOfExperience: string;
   username: string;
+}
+
+export enum Stack {
+  frontEnd,
+  backEnd,
+  fullStack,
 }
 
 export type UserCredentials = Pick<UserData, "email" | "password">;
