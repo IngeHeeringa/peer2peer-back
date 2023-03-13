@@ -1,16 +1,16 @@
 import { type NextFunction, type Response } from "express";
 import jwt from "jsonwebtoken";
 import bcrypt, { hash } from "bcryptjs";
-import User from "../../database/models/User";
-import { mockLoginRequest, mockLoginResponse } from "../../mocks/loginMocks";
+import User from "../../../database/models/User";
+import { mockLoginRequest, mockLoginResponse } from "../../../mocks/loginMocks";
 import { loginUser, registerUser } from "./userControllers";
-import { type UserCredentials } from "../../database/types";
-import { CustomError } from "../../CustomError/CustomError";
+import { type UserCredentials } from "../../../database/types";
+import { CustomError } from "../../../CustomError/CustomError";
 import {
   mockBadRegisterRequest as mockInvalidRegisterRequest,
   mockRegisterRequest,
   mockRegisterResponse,
-} from "../../mocks/registerMocks";
+} from "../../../mocks/registerMocks";
 
 beforeEach(() => jest.clearAllMocks());
 

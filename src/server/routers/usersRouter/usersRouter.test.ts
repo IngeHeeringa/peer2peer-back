@@ -3,10 +3,10 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import { MongoMemoryServer } from "mongodb-memory-server";
 import request from "supertest";
-import User from "../../database/models/User";
-import connectDatabase from "../../database/connectDatabase";
-import { app } from "..";
-import { type UserData, type UserCredentials } from "../../database/types";
+import User from "../../../database/models/User";
+import connectDatabase from "../../../database/connectDatabase";
+import { app } from "../..";
+import { type UserData, type UserCredentials } from "../../../database/types";
 
 let server: MongoMemoryServer;
 
