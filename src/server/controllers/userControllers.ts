@@ -26,8 +26,7 @@ export const loginUser = async (
         "Wrong credentials"
       );
 
-      next(authError);
-      return;
+      throw authError;
     }
 
     if (!(await bcrypt.compare(password, user.password))) {
@@ -37,8 +36,7 @@ export const loginUser = async (
         "Wrong credentials"
       );
 
-      next(authError);
-      return;
+      throw authError;
     }
 
     const jwtPayload = {
@@ -52,13 +50,7 @@ export const loginUser = async (
 
     res.status(200).json({ email, token });
   } catch (error: unknown) {
-    const customError = new CustomError(
-      (error as Error).message,
-      500,
-      "Internal server error"
-    );
-
-    next(customError);
+    next(error);
   }
 };
 
