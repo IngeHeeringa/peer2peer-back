@@ -1,3 +1,5 @@
+import type mongoose from "mongoose";
+
 export interface UserData {
   username: string;
   email: string;
@@ -12,7 +14,10 @@ export interface PostData {
   stack: string;
   technologies: string[];
   yearsOfExperience: string;
-  username: string;
+}
+
+export interface PostDataWithId extends PostData {
+  _id: mongoose.Types.ObjectId;
 }
 
 export type UserCredentials = Pick<UserData, "email" | "password">;
