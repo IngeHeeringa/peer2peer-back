@@ -1,7 +1,8 @@
-import { type Response, type NextFunction } from "express";
+import { type Response, type NextFunction, type Request } from "express";
 import Post from "../../../database/models/Post";
+import { type PostData } from "../../../database/types";
 import { mockPostRequest, mockPostResponse } from "../../../mocks/postMocks";
-import { deletePostById, getPosts } from "./postsController";
+import { createPost, deletePostById, getPosts } from "./postsController";
 
 export const mockNext = jest.fn() as NextFunction;
 
@@ -60,7 +61,7 @@ describe("Given a deletePostById controller", () => {
   });
 
   describe("When it receives a response and Post.findByIdAndDelete returns an error", () => {
-    test("Then it should call the next function with deletePostById error with status code 500", async () => {
+    test("Then it should call the next function", async () => {
       Post.findByIdAndDelete = jest.fn().mockReturnValue(new Error());
 
       await deletePostById(
@@ -69,7 +70,74 @@ describe("Given a deletePostById controller", () => {
         mockNext
       );
 
-      expect(mockPostResponse.json).toHaveBeenCalled();
+      expect(mockNext).toHaveBeenCalled();
+    });
+  });
+});
+
+describe("Given a createPost controller", () => {
+  describe("When it receives a response and Post.create returns the created post", () => {
+    test("Then it should call the response's status method with code 201", async () => {
+      const mockRequest = {} as Request<
+        Record<string, unknown>,
+        Record<string, unknown>,
+        PostData
+      >;
+      const mockResponse = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      } as Partial<Response>;
+
+      const expectedStatus = 201;
+
+      Post.create = jest.fn().mockReturnValue({});
+
+      await createPost(mockRequest, mockResponse as Response, mockNext);
+
+      expect(mockResponse.status).toHaveBeenCalledWith(expectedStatus);
+    });
+
+    test("Then it should call its JSON method with message 'Post created successfully'", async () => {
+      const expectedResponseBody = { message: "Post created successfully" };
+      const mockRequest = {} as Request<
+        Record<string, unknown>,
+        Record<string, unknown>,
+        PostData
+      >;
+      const mockResponse = {
+        status: jest.fn().mockReturnThis(),
+        json: jest
+          .fn()
+          .mockResolvedValue({ message: "Post created successfully" }),
+      } as Partial<Response>;
+
+      const next = jest.fn();
+
+      Post.create = jest.fn().mockReturnValue({});
+
+      await createPost(mockRequest, mockResponse as Response, next);
+
+      expect(mockResponse.json).toHaveBeenCalledWith(expectedResponseBody);
+    });
+  });
+
+  describe("When it receives a response and Post.create returns an error", () => {
+    test("Then it should call the net function", async () => {
+      const mockRequest = {} as Request<
+        Record<string, unknown>,
+        Record<string, unknown>,
+        PostData
+      >;
+      const mockResponse = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      } as Partial<Response>;
+
+      Post.create = jest.fn().mockRejectedValue(new Error());
+
+      await createPost(mockRequest, mockResponse as Response, mockNext);
+
+      expect(mockNext).toHaveBeenCalled();
     });
   });
 });

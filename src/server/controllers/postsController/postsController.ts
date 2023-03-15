@@ -1,6 +1,7 @@
 import { type NextFunction, type Request, type Response } from "express";
 import { CustomError } from "../../../CustomError/CustomError.js";
 import Post from "../../../database/models/Post.js";
+import { type PostData } from "../../../database/types.js";
 
 export const getPosts = async (
   req: Request,
@@ -45,5 +46,27 @@ export const deletePostById = async (
     );
 
     next(deletePostError);
+  }
+};
+
+export const createPost = async (
+  req: Request<Record<string, unknown>, Record<string, unknown>, PostData>,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const newPost = req.body;
+
+    await Post.create({ newPost });
+
+    res.status(201).json({ message: "Post created successfully" });
+  } catch (error) {
+    const customError = new CustomError(
+      error.message as string,
+      500,
+      "Post could not be created"
+    );
+
+    next(customError);
   }
 };
