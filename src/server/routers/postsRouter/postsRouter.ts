@@ -2,7 +2,7 @@ import { Router } from "express";
 import {
   deletePostById,
   getPosts,
-} from "../../controllers/postsController.ts/postsController.js";
+} from "../../controllers/postsController/postsController.js";
 
 const postsRouter = Router();
 
