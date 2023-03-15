@@ -25,3 +25,25 @@ export const getPosts = async (
     next(error);
   }
 };
+
+export const deletePostById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { idPost } = req.params;
+
+    const post = await Post.findByIdAndDelete(idPost).exec();
+
+    res.status(200).json({ post });
+  } catch (error) {
+    const deletePostError = new CustomError(
+      error.message as string,
+      500,
+      "The requested post could not be deleted"
+    );
+
+    next(deletePostError);
+  }
+};

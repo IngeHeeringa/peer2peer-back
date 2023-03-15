@@ -1,7 +1,7 @@
 import { type Response, type NextFunction } from "express";
 import Post from "../../../database/models/Post";
 import { mockPostRequest, mockPostResponse } from "../../../mocks/postMocks";
-import { getPosts } from "./postsController";
+import { deletePostById, getPosts } from "./postsController";
 
 export const mockNext = jest.fn() as NextFunction;
 
@@ -18,7 +18,6 @@ describe("Given a getPosts controller", () => {
       expect(mockPostResponse.status).toHaveBeenCalledWith(200);
     });
   });
-
   describe("When it receives a response and Post.find returns a collection of Posts", () => {
     test("Then it should call the response's JSON method with that collection of Posts", async () => {
       Post.find = jest.fn().mockImplementationOnce(() => ({
@@ -39,6 +38,38 @@ describe("Given a getPosts controller", () => {
       await getPosts(mockPostRequest, mockPostResponse as Response, mockNext);
 
       expect(mockNext).toHaveBeenCalled();
+    });
+  });
+});
+
+describe("Given a deletePostById controller", () => {
+  describe("When it receives a response and Post.findByIdAndDelete returns the deleted post", () => {
+    test("Then it should call the response's status method with code 200", async () => {
+      Post.findByIdAndDelete = jest.fn().mockImplementationOnce(() => ({
+        exec: jest.fn().mockResolvedValue({}),
+      }));
+
+      await deletePostById(
+        mockPostRequest,
+        mockPostResponse as Response,
+        mockNext
+      );
+
+      expect(mockPostResponse.status).toHaveBeenCalledWith(200);
+    });
+  });
+
+  describe("When it receives a response and Post.findByIdAndDelete returns an error", () => {
+    test("Then it should call the next function with deletePostById error with status code 500", async () => {
+      Post.findByIdAndDelete = jest.fn().mockReturnValue(new Error());
+
+      await deletePostById(
+        mockPostRequest,
+        mockPostResponse as Response,
+        mockNext
+      );
+
+      expect(mockPostResponse.json).toHaveBeenCalled();
     });
   });
 });
