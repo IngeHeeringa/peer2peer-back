@@ -1,6 +1,8 @@
 import { type Request, type Response } from "express";
 
-export const mockPostRequest = {} as Request;
+export const mockPostRequest = {
+  params: {},
+} as Request;
 
 export const mockPostResponse = {
   status: jest.fn().mockReturnThis(),

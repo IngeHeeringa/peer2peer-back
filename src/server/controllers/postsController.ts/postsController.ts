@@ -33,7 +33,9 @@ export const deletePostById = async (
 ) => {
   try {
     const { idPost } = req.params;
+
     const post = await Post.findByIdAndDelete(idPost).exec();
+
     res.status(200).json({ post });
   } catch (error) {
     const deletePostError = new CustomError(
