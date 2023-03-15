@@ -1,4 +1,5 @@
 import { model, Schema } from "mongoose";
+import User from "./User";
 
 export const postSchema = new Schema({
   projectTitle: {
@@ -29,6 +30,7 @@ export const postSchema = new Schema({
     type: String,
     required: true,
   },
+  creator: { type: Schema.Types.ObjectId, ref: "User" },
 });
 
 export const Post = model("Post", postSchema, "posts");
