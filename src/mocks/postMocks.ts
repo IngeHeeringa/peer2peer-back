@@ -1,6 +1,7 @@
 import { type Request, type Response } from "express";
 
 export const mockPostRequest = {
+  header: {},
   params: {},
 } as Request;
 
