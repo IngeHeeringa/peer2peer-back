@@ -8,7 +8,7 @@ export const getPosts = async (
   next: NextFunction
 ) => {
   try {
-    const posts = await Post.find().exec();
+    const posts = await Post.find({}).populate("creator").exec();
 
     if (posts.length === 0) {
       const getPostsError = new CustomError(

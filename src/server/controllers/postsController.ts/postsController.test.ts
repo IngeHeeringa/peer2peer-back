@@ -9,6 +9,7 @@ describe("Given a getPosts controller", () => {
   describe("When it receives a response and Post.find returns a collection of Posts", () => {
     test("Then it should call the response's status method with code 200", async () => {
       Post.find = jest.fn().mockImplementationOnce(() => ({
+        populate: jest.fn().mockReturnThis(),
         exec: jest.fn().mockReturnValue({}),
       }));
 
@@ -21,6 +22,7 @@ describe("Given a getPosts controller", () => {
   describe("When it receives a response and Post.find returns a collection of Posts", () => {
     test("Then it should call the response's JSON method with that collection of Posts", async () => {
       Post.find = jest.fn().mockImplementationOnce(() => ({
+        populate: jest.fn().mockReturnThis(),
         exec: jest.fn().mockReturnValue({}),
       }));
 
