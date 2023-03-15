@@ -32,9 +32,9 @@ export const deletePostById = async (
   next: NextFunction
 ) => {
   try {
-    const { idPost } = req.params;
+    const { id } = req.params;
 
-    const post = await Post.findByIdAndDelete(idPost).exec();
+    const post = await Post.findByIdAndDelete(id).exec();
 
     res.status(200).json({ post });
   } catch (error) {
