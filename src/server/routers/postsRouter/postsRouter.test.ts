@@ -80,6 +80,7 @@ describe("Given a GET '/posts' endpoint", () => {
 
 describe("Given a DELETE '/posts/delete/:id' endpoint", () => {
   const pathDelete = "/posts/delete/";
+
   describe("When it receives a request with an id of a post in the database", () => {
     let mockPosts: PostDataWithId[];
     beforeAll(async () => {
