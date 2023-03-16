@@ -57,7 +57,9 @@ export const createPost = async (
   try {
     const newPost = req.body;
 
-    await Post.create({ newPost });
+    const image = req.file?.filename;
+
+    await Post.create({ ...newPost, image });
 
     res.status(201).json({ message: "Post created successfully" });
   } catch (error) {
