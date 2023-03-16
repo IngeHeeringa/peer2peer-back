@@ -26,6 +26,7 @@ const posts = [
   {
     projectTitle: "Mock Project",
     image: "url",
+    backupImage: "url",
     shortDescription: "Mock short description",
     fullDescription: "Mock full description",
     stack: "Full Stack",
@@ -35,6 +36,7 @@ const posts = [
   {
     projectTitle: "Test Project",
     image: "url",
+    backupImage: "url",
     shortDescription: "Mock short description",
     fullDescription: "Mock full description",
     stack: "Back End",
