@@ -9,13 +9,13 @@ export const getPosts = async (
   next: NextFunction
 ) => {
   try {
-    const posts = await Post.find({}).populate("creator").exec();
+    const posts = await Post.find({}).exec();
 
     if (posts.length === 0) {
       const getPostsError = new CustomError(
-        "Sorry, we could not get any posts",
+        "No posts found",
         500,
-        "Sorry, we could not get any posts"
+        "No posts found"
       );
 
       throw getPostsError;

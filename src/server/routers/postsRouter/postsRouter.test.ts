@@ -65,7 +65,7 @@ describe("Given a GET '/posts' endpoint", () => {
   describe("When it receives a request and there are no posts in the database", () => {
     test("Then the response body should include status code 500 and error message 'Sorry, we could not get any posts'", async () => {
       const expectedErrorMessage = {
-        error: "Sorry, we could not get any posts",
+        error: "No posts found",
       };
       const expectedStatusCode = 500;
 
