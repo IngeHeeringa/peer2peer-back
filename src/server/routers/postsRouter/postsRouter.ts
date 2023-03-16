@@ -1,3 +1,4 @@
+import "../../../loadEnvironment";
 import { Router } from "express";
 import multer from "multer";
 import crypto from "crypto";
@@ -16,11 +17,11 @@ const storage = multer.diskStorage({
     const suffix = crypto.randomUUID();
     const extension = path.extname(file.originalname);
     const basename = path.basename(file.originalname, extension);
-    callback(null, `${basename}-${suffix}.${extension}`);
+    callback(null, `${basename}-${suffix}${extension}`);
   },
 });
 
-const upload = multer({ storage });
+const upload = multer({ storage, limits: { fileSize: 1024 * 1024 * 8 } });
 
 postsRouter.get("/posts", getPosts);
 postsRouter.delete("/posts/delete/:id", deletePostById);

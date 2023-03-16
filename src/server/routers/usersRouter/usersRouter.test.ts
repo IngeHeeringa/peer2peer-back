@@ -1,3 +1,4 @@
+import "../../../loadEnvironment";
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
@@ -42,7 +43,7 @@ describe("Given a POST '/users/login' endpoint", () => {
     });
 
     test("Then it should respond with status code 200 and a token", async () => {
-      const endpoint = "/users/login";
+      const pathLogin = "/users/login";
       const expectedStatusCode = 200;
       const expectedProperty = "token";
       jwt.sign = jest.fn().mockReturnValue({
@@ -51,7 +52,7 @@ describe("Given a POST '/users/login' endpoint", () => {
       bcrypt.compare = jest.fn().mockResolvedValueOnce(true);
 
       const response = await request(app)
-        .post(endpoint)
+        .post(pathLogin)
         .send(userCredentials)
         .expect(expectedStatusCode);
 
@@ -99,17 +100,17 @@ describe("Given a POST '/users/login' endpoint", () => {
 });
 
 describe("Given a POST '/users/register' endpoint", () => {
-  const endpoint = "/users/register";
+  const pathRegister = "/users/register";
 
   describe("When it receives a request with username 'user', password '12345678' and email 'user@user.com'", () => {
-    test("Then the response body should include the username 'User' and the message 'User registered successfully'", async () => {
+    test("Then the response body should include the message 'User registered successfully'", async () => {
       const expectedStatusCode = 201;
       const expectedResponseBody = {
         message: "User registered successfully",
       };
 
       const response = await request(app)
-        .post(endpoint)
+        .post(pathRegister)
         .send(userData)
         .expect(expectedStatusCode);
 
@@ -126,7 +127,7 @@ describe("Given a POST '/users/register' endpoint", () => {
       const expectedStatusCode = 500;
 
       const response = await request(app)
-        .post(endpoint)
+        .post(pathRegister)
         .send(userData)
         .expect(expectedStatusCode);
 
@@ -138,7 +139,7 @@ describe("Given a POST '/users/register' endpoint", () => {
       const expectedErrorMessage = { error: "Couldn't register the user" };
 
       const response = await request(app)
-        .post(endpoint)
+        .post(pathRegister)
         .send(userData)
         .expect(expectedStatusCode);
 

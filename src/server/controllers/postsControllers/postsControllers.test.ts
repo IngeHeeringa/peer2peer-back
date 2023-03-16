@@ -97,7 +97,7 @@ describe("Given a createPost controller", () => {
       expect(mockResponse.status).toHaveBeenCalledWith(expectedStatus);
     });
 
-    test("Then it should call its JSON method with message 'Post created successfully' and the backup image URL", async () => {
+    test("Then it should call its JSON method with message 'Post created successfully' and the URL of the uploaded image", async () => {
       const mockPost = {
         projectTitle: "Test Project",
         image: "url",
