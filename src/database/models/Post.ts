@@ -30,7 +30,9 @@ export const postSchema = new Schema(
       type: String,
       required: true,
     },
-    creator: { type: Schema.Types.ObjectId, ref: "User" },
+    creator: {
+      type: String,
+    },
   },
   { timestamps: true }
 );
