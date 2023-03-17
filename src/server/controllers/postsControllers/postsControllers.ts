@@ -60,8 +60,8 @@ export const createPost = async (
   try {
     const newPost: PostData = {
       ...req.body,
-      technologies: Array.isArray(req.body.technologies)
-        ? req.body.technologies.join(",")
+      technologies: (req.body.technologies as string).includes(",")
+        ? (req.body.technologies as string).split(",")
         : req.body.technologies,
     };
 
