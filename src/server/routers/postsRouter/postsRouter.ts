@@ -1,4 +1,3 @@
-import "../../../loadEnvironment";
 import { Router } from "express";
 import multer from "multer";
 import crypto from "crypto";
@@ -11,17 +10,22 @@ import {
 
 const postsRouter = Router();
 
-const storage = multer.diskStorage({
-  destination: "uploads/",
-  filename(req, file, callback) {
-    const suffix = crypto.randomUUID();
-    const extension = path.extname(file.originalname);
-    const basename = path.basename(file.originalname, extension);
-    callback(null, `${basename}-${suffix}${extension}`);
-  },
-});
+const multerConfig = {
+  storage: multer.diskStorage({
+    destination: "uploads/",
+    filename(req, file, callback) {
+      const suffix = crypto.randomUUID();
+      const extension = path.extname(file.originalname);
+      const basename = path.basename(file.originalname, extension);
+      callback(null, `${basename}-${suffix}${extension}`);
+    },
+  }),
+};
 
-const upload = multer({ storage, limits: { fileSize: 1024 * 1024 * 8 } });
+const upload = multer({
+  ...multerConfig,
+  limits: { fileSize: 1024 * 1024 * 8 },
+});
 
 postsRouter.get("/posts", getPosts);
 postsRouter.delete("/posts/delete/:id", deletePostById);
