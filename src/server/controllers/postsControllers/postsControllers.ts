@@ -1,4 +1,3 @@
-import "../../../loadEnvironment.js";
 import fs from "fs/promises";
 import path from "path";
 import { type NextFunction, type Request, type Response } from "express";
