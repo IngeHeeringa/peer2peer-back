@@ -58,7 +58,12 @@ export const createPost = async (
   next: NextFunction
 ) => {
   try {
-    const newPost = req.body;
+    const newPost: PostData = {
+      ...req.body,
+      technologies: Array.isArray(req.body.technologies)
+        ? req.body.technologies.join(",")
+        : req.body.technologies,
+    };
 
     const image = req.file?.filename;
 
@@ -76,7 +81,11 @@ export const createPost = async (
       .from(process.env.SUPABASE_BUCKET!)
       .getPublicUrl(image!);
 
-    await Post.create({ ...newPost, image, backupImage: publicUrl });
+    await Post.create({
+      ...newPost,
+      image,
+      backupImage: publicUrl,
+    });
 
     res
       .status(201)
