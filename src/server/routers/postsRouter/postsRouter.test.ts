@@ -1,6 +1,8 @@
+import "../../../loadEnvironment";
 import { MongoMemoryServer } from "mongodb-memory-server";
-import mongoose, { Query } from "mongoose";
+import mongoose from "mongoose";
 import request from "supertest";
+import crypto from "crypto";
 import connectDatabase from "../../../database/connectDatabase.js";
 import Post from "../../../database/models/Post.js";
 import { type PostDataWithId, type PostData } from "../../../database/types.js";
@@ -26,6 +28,7 @@ const posts = [
   {
     projectTitle: "Mock Project",
     image: "url",
+    backupImage: "url",
     shortDescription: "Mock short description",
     fullDescription: "Mock full description",
     stack: "Full Stack",
@@ -35,6 +38,7 @@ const posts = [
   {
     projectTitle: "Test Project",
     image: "url",
+    backupImage: "url",
     shortDescription: "Mock short description",
     fullDescription: "Mock full description",
     stack: "Back End",
@@ -112,6 +116,39 @@ describe("Given a DELETE '/posts/delete/:id' endpoint", () => {
 
       const response = await request(app)
         .delete(`${pathDelete}3`)
+        .expect(expectedStatusCode);
+
+      expect(response.body).toStrictEqual(expectedResponseBody);
+    });
+  });
+});
+
+describe("Given a POST '/posts/create' endpoint", () => {
+  const pathCreate = "/posts/create";
+
+  describe("When it receives a request with data to create a post", () => {
+    test("Then the response body should include the message 'Post created successfully' and the URL of the uploaded image", async () => {
+      const expectedStatusCode = 201;
+      const suffix = "abc";
+
+      crypto.randomUUID = jest.fn().mockReturnValue(suffix);
+
+      const expectedResponseBody = {
+        message: "Post created successfully",
+        imageUrl: `https://lqcnsazbhhkxovvryvfj.supabase.co/storage/v1/object/public/images/uploadedImage-${suffix}.png`,
+      };
+
+      const response = await request(app)
+        .post(pathCreate)
+        .field("projectTitle", "Test")
+        .field("shortDescription", "Test")
+        .field("fullDescription", "Test")
+        .field("stack", "Test")
+        .field("technologies", "Test")
+        .field("yearsOfExperience", "Test")
+        .attach("image", Buffer.from("uploads"), {
+          filename: "uploadedImage.png",
+        })
         .expect(expectedStatusCode);
 
       expect(response.body).toStrictEqual(expectedResponseBody);

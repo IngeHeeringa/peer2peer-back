@@ -1,3 +1,4 @@
+import "../../../loadEnvironment";
 import { Router } from "express";
 import { validate } from "express-validation";
 import {

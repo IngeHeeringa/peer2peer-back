@@ -1,7 +1,11 @@
+import "../../../loadEnvironment.js";
+import fs from "fs/promises";
+import path from "path";
 import { type NextFunction, type Request, type Response } from "express";
 import { CustomError } from "../../../CustomError/CustomError.js";
 import Post from "../../../database/models/Post.js";
 import { type PostData } from "../../../database/types.js";
+import { supabase } from "../../middlewares/imageBackup/imageBackup.js";
 
 export const getPosts = async (
   req: Request,
@@ -57,9 +61,27 @@ export const createPost = async (
   try {
     const newPost = req.body;
 
-    await Post.create({ newPost });
+    const image = req.file?.filename;
 
-    res.status(201).json({ message: "Post created successfully" });
+    if (image) {
+      const imageBuffer = await fs.readFile(path.join("uploads", image));
+
+      await supabase.storage
+        .from(process.env.SUPABASE_BUCKET!)
+        .upload(image, imageBuffer);
+    }
+
+    const {
+      data: { publicUrl },
+    } = supabase.storage
+      .from(process.env.SUPABASE_BUCKET!)
+      .getPublicUrl(image!);
+
+    await Post.create({ ...newPost, image, backupImage: publicUrl });
+
+    res
+      .status(201)
+      .json({ message: "Post created successfully", imageUrl: publicUrl });
   } catch (error) {
     const customError = new CustomError(
       error.message as string,

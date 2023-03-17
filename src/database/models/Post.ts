@@ -10,6 +10,10 @@ export const postSchema = new Schema(
       type: String,
       required: true,
     },
+    backupImage: {
+      type: String,
+      required: true,
+    },
     shortDescription: {
       type: String,
       required: true,

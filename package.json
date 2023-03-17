@@ -5,8 +5,10 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "jest",
-    "test:coverage": "jest --coverage --watchAll=false",
+    "test": "npm run test:unit && npm run test:integration",
+    "test:coverage": "npm run test:unit -- --coverage --watchAll=false && npm run test:integration -- --coverage --watchAll=false",
+    "test:unit": "jest --config=jest.config.cjs",
+    "test:integration": "jest --config=jest.integration.config.cjs",
     "start": "node dist",
     "build": "npx tsc",
     "build:dev": "npx tsc -w",
@@ -47,6 +49,7 @@
     "typescript": "^4.9.5"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.11.0",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "debug": "^4.3.4",
