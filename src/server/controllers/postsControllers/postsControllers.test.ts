@@ -77,12 +77,26 @@ describe("Given a deletePostById controller", () => {
 
 describe("Given a createPost controller", () => {
   describe("When it receives a response and Post.create returns the created post", () => {
+    const mockPost = {
+      projectTitle: "Test Project",
+      image: "url",
+      backupImage: "url",
+      shortDescription: "Mock short description",
+      fullDescription: "Mock full description",
+      stack: "Back End",
+      technologies: ["Fake", "Test"],
+      yearsOfExperience: "1-3 years",
+    };
+
     test("Then it should call the response's status method with code 201", async () => {
-      const mockRequest = {} as Request<
+      const mockRequest = {
+        body: mockPost,
+      } as unknown as Request<
         Record<string, unknown>,
         Record<string, unknown>,
         PostData
       >;
+
       const mockResponse = {
         status: jest.fn().mockReturnThis(),
         json: jest.fn(),
@@ -98,17 +112,6 @@ describe("Given a createPost controller", () => {
     });
 
     test("Then it should call its JSON method with message 'Post created successfully' and the URL of the uploaded image", async () => {
-      const mockPost = {
-        projectTitle: "Test Project",
-        image: "url",
-        backupImage: "url",
-        shortDescription: "Mock short description",
-        fullDescription: "Mock full description",
-        stack: "Back End",
-        technologies: ["Fake", "Test"],
-        yearsOfExperience: "1-3 years",
-      };
-
       const file = {
         filename: "uploadedImage",
       };

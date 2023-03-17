@@ -12,7 +12,7 @@ export interface PostData {
   shortDescription: string;
   fullDescription: string;
   stack: string;
-  technologies: string[];
+  technologies: string | string[];
   yearsOfExperience: string;
 }
 
