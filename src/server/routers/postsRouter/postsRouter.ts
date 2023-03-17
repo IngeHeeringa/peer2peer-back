@@ -29,6 +29,6 @@ const upload = multer({
 
 postsRouter.get("/posts", getPosts);
 postsRouter.delete("/posts/delete/:id", deletePostById);
-postsRouter.post("/posts/create", upload.single("image"), createPost);
+postsRouter.post("/posts/submit", upload.single("image"), createPost);
 
 export default postsRouter;

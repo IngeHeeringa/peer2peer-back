@@ -123,8 +123,8 @@ describe("Given a DELETE '/posts/delete/:id' endpoint", () => {
   });
 });
 
-describe("Given a POST '/posts/create' endpoint", () => {
-  const pathCreate = "/posts/create";
+describe("Given a POST '/posts/submit' endpoint", () => {
+  const pathCreate = "/posts/submit";
 
   describe("When it receives a request with data to create a post", () => {
     test("Then the response body should include the message 'Post created successfully' and the URL of the uploaded image", async () => {
