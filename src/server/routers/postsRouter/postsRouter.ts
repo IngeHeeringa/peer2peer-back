@@ -1,4 +1,4 @@
-import "../../../loadEnvironment";
+import "../../../loadEnvironment.js";
 import { Router } from "express";
 import multer from "multer";
 import crypto from "crypto";
