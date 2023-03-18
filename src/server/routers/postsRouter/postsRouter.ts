@@ -1,3 +1,4 @@
+import "../../../loadEnvironment";
 import { Router } from "express";
 import multer from "multer";
 import crypto from "crypto";
@@ -7,6 +8,7 @@ import {
   deletePostById,
   getPosts,
 } from "../../controllers/postsControllers/postsControllers.js";
+import auth from "../../middlewares/auth/auth.js";
 
 const postsRouter = Router();
 
@@ -28,7 +30,7 @@ const upload = multer({
 });
 
 postsRouter.get("/posts", getPosts);
-postsRouter.delete("/posts/delete/:id", deletePostById);
-postsRouter.post("/posts/submit", upload.single("image"), createPost);
+postsRouter.delete("/posts/delete/:id", auth, deletePostById);
+postsRouter.post("/posts/submit", auth, upload.single("image"), createPost);
 
 export default postsRouter;

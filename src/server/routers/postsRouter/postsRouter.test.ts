@@ -3,10 +3,12 @@ import { MongoMemoryServer } from "mongodb-memory-server";
 import mongoose from "mongoose";
 import request from "supertest";
 import crypto from "crypto";
+import jwt from "jsonwebtoken";
 import connectDatabase from "../../../database/connectDatabase.js";
 import Post from "../../../database/models/Post.js";
-import { type PostDataWithId, type PostData } from "../../../database/types.js";
+import { type PostDataWithId, type UserData } from "../../../database/types.js";
 import { app } from "../../index.js";
+import User from "../../../database/models/User";
 
 let server: MongoMemoryServer;
 
@@ -85,6 +87,25 @@ describe("Given a GET '/posts' endpoint", () => {
 describe("Given a DELETE '/posts/delete/:id' endpoint", () => {
   const pathDelete = "/posts/delete/";
 
+  const userData: UserData = {
+    username: "user",
+    password: "12345678",
+    email: "mock@user.com",
+  };
+
+  let token: string;
+
+  beforeEach(async () => {
+    await User.create(userData);
+
+    const user = await User.findOne({ username: userData.username });
+    token = jwt.sign({ sub: user?._id }, process.env.JWT_SECRET!);
+  });
+
+  afterEach(async () => {
+    await User.deleteMany();
+  });
+
   describe("When it receives a request with an id of a post in the database", () => {
     let mockPosts: PostDataWithId[];
     beforeAll(async () => {
@@ -99,6 +120,7 @@ describe("Given a DELETE '/posts/delete/:id' endpoint", () => {
 
       const response = await request(app)
         .delete(`${pathDelete}${post._id.toString()}`)
+        .set("Authorization", `Bearer ${token}`)
         .expect(expectedStatusCode);
 
       expect(response.body).toStrictEqual(expectedResponseBody);
@@ -116,6 +138,27 @@ describe("Given a DELETE '/posts/delete/:id' endpoint", () => {
 
       const response = await request(app)
         .delete(`${pathDelete}3`)
+        .set("Authorization", `Bearer ${token}`)
+        .expect(expectedStatusCode);
+
+      expect(response.body).toStrictEqual(expectedResponseBody);
+    });
+  });
+
+  describe("When it receives a request from an unauthenticated user", () => {
+    let mockPosts: PostDataWithId[];
+    beforeAll(async () => {
+      mockPosts = await Post.create(posts);
+    });
+
+    test("Then the access should be forbidden with status code 403 and error message 'Missing token'", async () => {
+      const expectedResponseBody = { error: "Missing token" };
+      const expectedStatusCode = 403;
+
+      const post = mockPosts[0];
+
+      const response = await request(app)
+        .delete(`${pathDelete}${post._id.toString()}`)
         .expect(expectedStatusCode);
 
       expect(response.body).toStrictEqual(expectedResponseBody);
@@ -125,6 +168,25 @@ describe("Given a DELETE '/posts/delete/:id' endpoint", () => {
 
 describe("Given a POST '/posts/submit' endpoint", () => {
   const pathCreate = "/posts/submit";
+
+  const userData: UserData = {
+    username: "user",
+    password: "12345678",
+    email: "mock@user.com",
+  };
+
+  let token: string;
+
+  beforeEach(async () => {
+    await User.create(userData);
+
+    const user = await User.findOne({ username: userData.username });
+    token = jwt.sign({ sub: user?._id }, process.env.JWT_SECRET!);
+  });
+
+  afterEach(async () => {
+    await User.deleteMany();
+  });
 
   describe("When it receives a request with data to create a post", () => {
     test("Then the response body should include the message 'Post created successfully' and the URL of the uploaded image", async () => {
@@ -140,6 +202,7 @@ describe("Given a POST '/posts/submit' endpoint", () => {
 
       const response = await request(app)
         .post(pathCreate)
+        .set("Authorization", `Bearer ${token}`)
         .field("projectTitle", "Test")
         .field("shortDescription", "Test")
         .field("fullDescription", "Test")
