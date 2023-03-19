@@ -34,6 +34,7 @@
     "@types/jsonwebtoken": "^9.0.1",
     "@types/morgan": "^1.9.4",
     "@types/multer": "^1.4.7",
+    "@types/sharp": "^0.31.1",
     "@types/supertest": "^2.0.12",
     "@typescript-eslint/eslint-plugin": "^5.54.0",
     "@typescript-eslint/parser": "^5.54.0",
@@ -61,6 +62,7 @@
     "mongoose": "^6.10.1",
     "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",
+    "sharp": "^0.31.3",
     "supertest": "^6.3.3"
   }
 }

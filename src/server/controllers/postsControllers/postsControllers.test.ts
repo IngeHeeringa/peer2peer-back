@@ -1,3 +1,4 @@
+/* eslint-disable max-nested-callbacks */
 import "../../../loadEnvironment";
 import { type Response, type NextFunction, type Request } from "express";
 import fs from "fs/promises";
@@ -7,6 +8,16 @@ import { mockPostRequest, mockPostResponse } from "../../../mocks/postMocks";
 import { createPost, deletePostById, getPosts } from "./postsControllers";
 
 export const mockNext = jest.fn() as NextFunction;
+jest.mock("sharp", () => ({
+  __esModule: true,
+  default: jest.fn(() => ({
+    resize: jest.fn(() => ({
+      webp: jest.fn(() => ({
+        toBuffer: jest.fn(() => "optimizedImageBuffer"),
+      })),
+    })),
+  })),
+}));
 
 describe("Given a getPosts controller", () => {
   describe("When it receives a response and Post.find returns a collection of Posts", () => {
@@ -77,6 +88,10 @@ describe("Given a deletePostById controller", () => {
 
 describe("Given a createPost controller", () => {
   describe("When it receives a response and Post.create returns the created post", () => {
+    const file = {
+      filename: "uploadedImage",
+    };
+
     const mockPost = {
       projectTitle: "Test Project",
       image: "url",
@@ -90,7 +105,8 @@ describe("Given a createPost controller", () => {
 
     test("Then it should call the response's status method with code 201", async () => {
       const mockRequest = {
-        body: mockPost,
+        body: { ...mockPost, technologies: "React,TypeScript" },
+        file,
       } as unknown as Request<
         Record<string, unknown>,
         Record<string, unknown>,
@@ -104,6 +120,8 @@ describe("Given a createPost controller", () => {
 
       const expectedStatus = 201;
 
+      fs.readFile = jest.fn().mockImplementationOnce(() => file.filename);
+
       Post.create = jest.fn().mockReturnValue({});
 
       await createPost(mockRequest, mockResponse as Response, mockNext);
@@ -112,17 +130,13 @@ describe("Given a createPost controller", () => {
     });
 
     test("Then it should call its JSON method with message 'Post created successfully' and the URL of the uploaded image", async () => {
-      const file = {
-        filename: "uploadedImage",
-      };
-
       const expectedResponseBody = {
         message: "Post created successfully",
         imageUrl:
           "https://lqcnsazbhhkxovvryvfj.supabase.co/storage/v1/object/public/images/uploadedImage",
       };
       const mockRequest = {
-        body: mockPost,
+        body: { ...mockPost, technologies: "React,TypeScript" },
         file,
       } as unknown as Request<
         Record<string, unknown>,
