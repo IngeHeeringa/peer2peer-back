@@ -5,7 +5,12 @@ import fs from "fs/promises";
 import Post from "../../../database/models/Post";
 import { type PostData } from "../../../database/types";
 import { mockPostRequest, mockPostResponse } from "../../../mocks/postMocks";
-import { createPost, deletePostById, getPosts } from "./postsControllers";
+import {
+  createPost,
+  deletePostById,
+  getPostById,
+  getPosts,
+} from "./postsControllers";
 
 export const mockNext = jest.fn() as NextFunction;
 jest.mock("sharp", () => ({
@@ -32,7 +37,7 @@ describe("Given a getPosts controller", () => {
     });
   });
   describe("When it receives a response and Post.find returns a collection of Posts", () => {
-    test("Then it should call the response's JSON method with that collection of Posts", async () => {
+    test("Then it should call the response's JSON method", async () => {
       Post.find = jest.fn().mockImplementationOnce(() => ({
         exec: jest.fn().mockReturnValue({}),
       }));
@@ -50,6 +55,58 @@ describe("Given a getPosts controller", () => {
       await getPosts(mockPostRequest, mockPostResponse as Response, mockNext);
 
       expect(mockNext).toHaveBeenCalled();
+    });
+  });
+});
+
+describe("Given a getPostById controller", () => {
+  describe("When it receives a response and Post.findById returns a post", () => {
+    test("Then it should call the response's status method with code 200", async () => {
+      Post.findById = jest.fn().mockImplementationOnce(() => ({
+        exec: jest.fn().mockReturnValue({}),
+      }));
+
+      await getPostById(
+        mockPostRequest,
+        mockPostResponse as Response,
+        mockNext
+      );
+
+      expect(mockPostResponse.status).toHaveBeenCalledWith(200);
+    });
+  });
+
+  describe("When it receives a response and Post.findById returns a post", () => {
+    test("Then it should call the response's JSON method", async () => {
+      Post.findById = jest.fn().mockImplementationOnce(() => ({
+        exec: jest.fn().mockReturnValue({}),
+      }));
+
+      await getPostById(
+        mockPostRequest,
+        mockPostResponse as Response,
+        mockNext
+      );
+
+      expect(mockPostResponse.json).toHaveBeenCalled();
+    });
+  });
+
+  describe("When it receives a response and Post.findById returns an error", () => {
+    test("Then it should call next function with getPostById error with status code 500", async () => {
+      Post.findById = jest.fn().mockReturnValue(new Error());
+
+      await getPostById(
+        mockPostRequest,
+        mockPostResponse as Response,
+        mockNext
+      );
+
+      expect(mockNext).toHaveBeenCalledWith(
+        expect.objectContaining({
+          statusCode: 500,
+        })
+      );
     });
   });
 });
