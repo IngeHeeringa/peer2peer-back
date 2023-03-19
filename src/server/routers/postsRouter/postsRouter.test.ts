@@ -96,6 +96,47 @@ describe("Given a GET '/posts' endpoint", () => {
   });
 });
 
+describe("Given a GET '/posts/:id' endpoint", () => {
+  const pathGetById = "/posts/";
+
+  describe("When it receives a request with an id of a post in the database", () => {
+    let mockPosts: PostDataWithId[];
+    beforeAll(async () => {
+      mockPosts = await Post.create(posts);
+    });
+
+    test("Then the response body should include that post", async () => {
+      const mockPost = mockPosts[0];
+
+      const expectedProperty = "post";
+      const expectedStatusCode = 200;
+
+      const response = await request(app)
+        .get(`${pathGetById}${mockPost._id.toString()}`)
+        .expect(expectedStatusCode);
+
+      expect(response.body).toHaveProperty(expectedProperty);
+    });
+  });
+
+  describe("When it receives a request with a non-existent id", () => {
+    beforeAll(async () => {
+      await Post.deleteMany();
+    });
+
+    test("Then the response body should include the error message 'Post not found'", async () => {
+      const expectedResponseBody = { error: "Post not found" };
+      const expectedStatusCode = 404;
+
+      const response = await request(app)
+        .get(`${pathGetById}3`)
+        .expect(expectedStatusCode);
+
+      expect(response.body).toStrictEqual(expectedResponseBody);
+    });
+  });
+});
+
 describe("Given a DELETE '/posts/delete/:id' endpoint", () => {
   const pathDelete = "/posts/delete/";
 

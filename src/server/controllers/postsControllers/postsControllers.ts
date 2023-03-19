@@ -43,7 +43,7 @@ export const getPostById = async (
   } catch (error) {
     const getPostError = new CustomError(
       error.message as string,
-      500,
+      404,
       "Post not found"
     );
 

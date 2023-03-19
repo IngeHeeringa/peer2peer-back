@@ -93,7 +93,7 @@ describe("Given a getPostById controller", () => {
   });
 
   describe("When it receives a response and Post.findById returns an error", () => {
-    test("Then it should call next function with getPostById error with status code 500", async () => {
+    test("Then it should call next function with getPostById error with status code 404", async () => {
       Post.findById = jest.fn().mockReturnValue(new Error());
 
       await getPostById(
@@ -104,7 +104,7 @@ describe("Given a getPostById controller", () => {
 
       expect(mockNext).toHaveBeenCalledWith(
         expect.objectContaining({
-          statusCode: 500,
+          statusCode: 404,
         })
       );
     });

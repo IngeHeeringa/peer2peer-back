@@ -6,6 +6,7 @@ import path from "path";
 import {
   createPost,
   deletePostById,
+  getPostById,
   getPosts,
 } from "../../controllers/postsControllers/postsControllers.js";
 import auth from "../../middlewares/auth/auth.js";
@@ -30,6 +31,7 @@ const upload = multer({
 });
 
 postsRouter.get("/posts", getPosts);
+postsRouter.get(`/posts/:id`, getPostById);
 postsRouter.delete("/posts/delete/:id", auth, deletePostById);
 postsRouter.post("/posts/submit", auth, upload.single("image"), createPost);
 
