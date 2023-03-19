@@ -1,3 +1,4 @@
+/* eslint-disable max-nested-callbacks */
 import "../../../loadEnvironment";
 import { MongoMemoryServer } from "mongodb-memory-server";
 import mongoose from "mongoose";
@@ -9,6 +10,17 @@ import Post from "../../../database/models/Post.js";
 import { type PostDataWithId, type UserData } from "../../../database/types.js";
 import { app } from "../../index.js";
 import User from "../../../database/models/User";
+
+jest.mock("sharp", () => ({
+  __esModule: true,
+  default: jest.fn(() => ({
+    resize: jest.fn(() => ({
+      webp: jest.fn(() => ({
+        toBuffer: jest.fn(() => "optimizedImageBuffer"),
+      })),
+    })),
+  })),
+}));
 
 let server: MongoMemoryServer;
 
