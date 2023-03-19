@@ -31,6 +31,26 @@ export const getPosts = async (
   }
 };
 
+export const getPostById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.params;
+    const post = await Post.findById(id).exec();
+    res.status(200).json({ post });
+  } catch (error) {
+    const getPostError = new CustomError(
+      error.message as string,
+      500,
+      "Post not found"
+    );
+
+    next(getPostError);
+  }
+};
+
 export const deletePostById = async (
   req: Request,
   res: Response,
