@@ -122,7 +122,7 @@ describe("Given a createPost controller", () => {
           "https://lqcnsazbhhkxovvryvfj.supabase.co/storage/v1/object/public/images/uploadedImage",
       };
       const mockRequest = {
-        body: mockPost,
+        body: { ...mockPost, technologies: "React,TypeScript" },
         file,
       } as unknown as Request<
         Record<string, unknown>,

@@ -1,5 +1,6 @@
 import fs from "fs/promises";
 import path from "path";
+import sharp from "sharp";
 import { type NextFunction, type Request, type Response } from "express";
 import { CustomError } from "../../../CustomError/CustomError.js";
 import Post from "../../../database/models/Post.js";
@@ -65,25 +66,28 @@ export const createPost = async (
         : req.body.technologies,
     };
 
-    const image = req.file?.filename;
+    const imageName = req.file?.filename;
 
-    if (image) {
-      const imageBuffer = await fs.readFile(path.join("uploads", image));
+    const imageBuffer = await fs.readFile(path.join("uploads", imageName!));
 
-      await supabase.storage
-        .from(process.env.SUPABASE_BUCKET!)
-        .upload(image, imageBuffer);
-    }
+    const optimizedImage = await sharp(imageBuffer)
+      .resize(312, 255, { fit: "cover" })
+      .webp()
+      .toBuffer();
+
+    await supabase.storage
+      .from(process.env.SUPABASE_BUCKET!)
+      .upload(imageName!, optimizedImage);
 
     const {
       data: { publicUrl },
     } = supabase.storage
       .from(process.env.SUPABASE_BUCKET!)
-      .getPublicUrl(image!);
+      .getPublicUrl(imageName!);
 
     await Post.create({
       ...newPost,
-      image,
+      image: imageName,
       backupImage: publicUrl,
     });
 
