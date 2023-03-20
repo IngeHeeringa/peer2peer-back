@@ -13,7 +13,11 @@ export const getPosts = async (
   next: NextFunction
 ) => {
   try {
-    const posts = await Post.find({}).exec();
+    const posts = await Post.find({})
+      .sort({ _id: -1 })
+      .limit(10)
+      .skip((+req.query.page! - 1) * 10)
+      .exec();
 
     res.status(200).json({ posts });
   } catch (error: unknown) {
@@ -83,6 +87,7 @@ export const createPost = async (
     const optimizedImage = await sharp(imageBuffer)
       .resize(465, 383, { fit: "cover" })
       .webp()
+      .toFormat("webp")
       .toBuffer();
 
     await supabase.storage

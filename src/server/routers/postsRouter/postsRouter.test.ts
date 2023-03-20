@@ -16,7 +16,9 @@ jest.mock("sharp", () => ({
   default: jest.fn(() => ({
     resize: jest.fn(() => ({
       webp: jest.fn(() => ({
-        toBuffer: jest.fn(() => "optimizedImageBuffer"),
+        toFormat: jest.fn(() => ({
+          toBuffer: jest.fn(() => "optimizedImageBuffer"),
+        })),
       })),
     })),
   })),
