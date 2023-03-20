@@ -91,7 +91,7 @@ export const createPost = async (
     const imageBuffer = await fs.readFile(path.join("uploads", imageName!));
 
     const optimizedImage = await sharp(imageBuffer)
-      .resize(312, 255, { fit: "cover" })
+      .resize(465, 382.5, { fit: "cover" })
       .webp()
       .toBuffer();
 
