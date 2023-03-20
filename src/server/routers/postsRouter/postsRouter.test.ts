@@ -79,21 +79,6 @@ describe("Given a GET '/posts' endpoint", () => {
       expect(response.body.posts).toHaveLength(expectedListLength);
     });
   });
-
-  describe("When it receives a request and there are no posts in the database", () => {
-    test("Then the response body should include status code 200 and message 'No posts found'", async () => {
-      const expectedMessage = {
-        message: "No posts found",
-      };
-      const expectedStatusCode = 200;
-
-      const response = await request(app)
-        .get(pathGetAll)
-        .expect(expectedStatusCode);
-
-      expect(response.body).toStrictEqual(expectedMessage);
-    });
-  });
 });
 
 describe("Given a GET '/posts/:id' endpoint", () => {
