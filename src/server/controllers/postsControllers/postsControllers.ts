@@ -16,13 +16,7 @@ export const getPosts = async (
     const posts = await Post.find({}).exec();
 
     if (posts.length === 0) {
-      const getPostsError = new CustomError(
-        "No posts found",
-        500,
-        "No posts found"
-      );
-
-      throw getPostsError;
+      res.status(200).json({ message: "No posts found" });
     }
 
     res.status(200).json({ posts });
@@ -91,7 +85,7 @@ export const createPost = async (
     const imageBuffer = await fs.readFile(path.join("uploads", imageName!));
 
     const optimizedImage = await sharp(imageBuffer)
-      .resize(465, 382.5, { fit: "cover" })
+      .resize(465, 383, { fit: "cover" })
       .webp()
       .toBuffer();
 
