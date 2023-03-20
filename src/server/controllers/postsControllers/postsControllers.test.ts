@@ -18,31 +18,55 @@ jest.mock("sharp", () => ({
   default: jest.fn(() => ({
     resize: jest.fn(() => ({
       webp: jest.fn(() => ({
-        toBuffer: jest.fn(() => "optimizedImageBuffer"),
+        toFormat: jest.fn(() => ({
+          toBuffer: jest.fn(() => "optimizedImageBuffer"),
+        })),
       })),
     })),
   })),
 }));
 
+const mockPosts = [{ title: "Post 1" }, { title: "Post 2" }];
+
 describe("Given a getPosts controller", () => {
   describe("When it receives a response and Post.find returns a collection of Posts", () => {
     test("Then it should call the response's status method with code 200", async () => {
-      Post.find = jest.fn().mockImplementationOnce(() => ({
-        exec: jest.fn().mockReturnValue({}),
-      }));
+      Post.find = jest.fn().mockReturnValue({
+        sort: jest.fn().mockReturnValue({
+          limit: jest.fn().mockReturnValue({
+            skip: jest.fn().mockReturnValue({
+              exec: jest.fn().mockReturnValue(mockPosts),
+            }),
+          }),
+        }),
+      });
 
-      await getPosts(mockPostRequest, mockPostResponse as Response, mockNext);
+      await getPosts(
+        mockPostRequest as Request,
+        mockPostResponse as Response,
+        mockNext
+      );
 
       expect(mockPostResponse.status).toHaveBeenCalledWith(200);
     });
   });
   describe("When it receives a response and Post.find returns a collection of Posts", () => {
     test("Then it should call the response's JSON method", async () => {
-      Post.find = jest.fn().mockImplementationOnce(() => ({
-        exec: jest.fn().mockReturnValue({}),
-      }));
+      Post.find = jest.fn().mockReturnValue({
+        sort: jest.fn().mockReturnValue({
+          limit: jest.fn().mockReturnValue({
+            skip: jest.fn().mockReturnValue({
+              exec: jest.fn().mockReturnValue(mockPosts),
+            }),
+          }),
+        }),
+      });
 
-      await getPosts(mockPostRequest, mockPostResponse as Response, mockNext);
+      await getPosts(
+        mockPostRequest as Request,
+        mockPostResponse as Response,
+        mockNext
+      );
 
       expect(mockPostResponse.json).toHaveBeenCalled();
     });
@@ -52,7 +76,11 @@ describe("Given a getPosts controller", () => {
     test("Then it should call the next function", async () => {
       Post.find = jest.fn().mockReturnValue(new Error());
 
-      await getPosts(mockPostRequest, mockPostResponse as Response, mockNext);
+      await getPosts(
+        mockPostRequest as Request,
+        mockPostResponse as Response,
+        mockNext
+      );
 
       expect(mockNext).toHaveBeenCalled();
     });
@@ -67,7 +95,7 @@ describe("Given a getPostById controller", () => {
       }));
 
       await getPostById(
-        mockPostRequest,
+        mockPostRequest as Request,
         mockPostResponse as Response,
         mockNext
       );
@@ -83,7 +111,7 @@ describe("Given a getPostById controller", () => {
       }));
 
       await getPostById(
-        mockPostRequest,
+        mockPostRequest as Request,
         mockPostResponse as Response,
         mockNext
       );
@@ -97,7 +125,7 @@ describe("Given a getPostById controller", () => {
       Post.findById = jest.fn().mockReturnValue(new Error());
 
       await getPostById(
-        mockPostRequest,
+        mockPostRequest as Request,
         mockPostResponse as Response,
         mockNext
       );
@@ -119,7 +147,7 @@ describe("Given a deletePostById controller", () => {
       }));
 
       await deletePostById(
-        mockPostRequest,
+        mockPostRequest as Request,
         mockPostResponse as Response,
         mockNext
       );
@@ -133,7 +161,7 @@ describe("Given a deletePostById controller", () => {
       Post.findByIdAndDelete = jest.fn().mockReturnValue(new Error());
 
       await deletePostById(
-        mockPostRequest,
+        mockPostRequest as Request,
         mockPostResponse as Response,
         mockNext
       );
