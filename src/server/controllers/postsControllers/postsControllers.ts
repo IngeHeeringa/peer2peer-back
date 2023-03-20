@@ -19,7 +19,9 @@ export const getPosts = async (
       .skip((+req.query.page! - 1) * 10)
       .exec();
 
-    res.status(200).json({ posts });
+    const totalPosts = await Post.countDocuments({}).exec();
+
+    res.status(200).json({ posts, totalPosts });
   } catch (error: unknown) {
     next(error);
   }

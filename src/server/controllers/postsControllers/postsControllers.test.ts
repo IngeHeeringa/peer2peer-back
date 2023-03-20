@@ -27,6 +27,7 @@ jest.mock("sharp", () => ({
 }));
 
 const mockPosts = [{ title: "Post 1" }, { title: "Post 2" }];
+const totalPosts = 2;
 
 describe("Given a getPosts controller", () => {
   describe("When it receives a response and Post.find returns a collection of Posts", () => {
@@ -41,6 +42,10 @@ describe("Given a getPosts controller", () => {
         }),
       });
 
+      Post.countDocuments = jest
+        .fn()
+        .mockReturnValue({ exec: jest.fn().mockReturnValue(totalPosts) });
+
       await getPosts(
         mockPostRequest as Request,
         mockPostResponse as Response,
@@ -50,6 +55,7 @@ describe("Given a getPosts controller", () => {
       expect(mockPostResponse.status).toHaveBeenCalledWith(200);
     });
   });
+
   describe("When it receives a response and Post.find returns a collection of Posts", () => {
     test("Then it should call the response's JSON method", async () => {
       Post.find = jest.fn().mockReturnValue({
@@ -61,6 +67,10 @@ describe("Given a getPosts controller", () => {
           }),
         }),
       });
+
+      Post.countDocuments = jest
+        .fn()
+        .mockReturnValue({ exec: jest.fn().mockReturnValue(totalPosts) });
 
       await getPosts(
         mockPostRequest as Request,
