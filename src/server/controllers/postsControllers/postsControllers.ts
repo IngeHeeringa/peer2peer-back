@@ -14,7 +14,7 @@ export const getPosts = async (
 ) => {
   try {
     const posts = await Post.find({})
-      .sort({ _id: -1 })
+      .sort({ createdAt: -1 })
       .limit(8)
       .skip((+req.query.page! - 1) * 8)
       .exec();
@@ -84,27 +84,35 @@ export const createPost = async (
 
     const imageName = req.file?.filename;
 
-    const imageBuffer = await fs.readFile(path.join("uploads", imageName!));
+    const width = 465;
+    const height = 383;
+    const imageQuality = 100;
 
-    const optimizedImage = await sharp(imageBuffer)
-      .resize(465, 383, { fit: "cover" })
-      .webp()
+    const optimizedImageName = `${imageName!}.webp`;
+
+    await sharp(path.join("uploads", imageName!))
+      .resize(width, height, { fit: "cover" })
+      .webp({ quality: imageQuality })
       .toFormat("webp")
-      .toBuffer();
+      .toFile(path.join("uploads", optimizedImageName));
+
+    const backupImage = await fs.readFile(
+      path.join("uploads", optimizedImageName)
+    );
 
     await supabase.storage
       .from(process.env.SUPABASE_BUCKET!)
-      .upload(imageName!, optimizedImage);
+      .upload(optimizedImageName, backupImage);
 
     const {
       data: { publicUrl },
     } = supabase.storage
       .from(process.env.SUPABASE_BUCKET!)
-      .getPublicUrl(imageName!);
+      .getPublicUrl(optimizedImageName);
 
     await Post.create({
       ...newPost,
-      image: imageName,
+      image: optimizedImageName,
       backupImage: publicUrl,
     });
 
