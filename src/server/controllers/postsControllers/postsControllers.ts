@@ -15,8 +15,8 @@ export const getPosts = async (
   try {
     const posts = await Post.find({})
       .sort({ _id: -1 })
-      .limit(10)
-      .skip((+req.query.page! - 1) * 10)
+      .limit(8)
+      .skip((+req.query.page! - 1) * 8)
       .exec();
 
     const totalPosts = await Post.countDocuments({}).exec();
