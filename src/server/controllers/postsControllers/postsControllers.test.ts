@@ -12,14 +12,17 @@ import {
   getPosts,
 } from "./postsControllers";
 
-export const mockNext = jest.fn() as NextFunction;
+const mockNext = jest.fn() as NextFunction;
+
+beforeEach(() => jest.clearAllMocks());
+
 jest.mock("sharp", () => ({
   __esModule: true,
   default: jest.fn(() => ({
     resize: jest.fn(() => ({
       webp: jest.fn(() => ({
         toFormat: jest.fn(() => ({
-          toBuffer: jest.fn(() => "optimizedImageBuffer"),
+          toFile: jest.fn(() => "optimizedImageFile"),
         })),
       })),
     })),
@@ -228,7 +231,7 @@ describe("Given a createPost controller", () => {
       const expectedResponseBody = {
         message: "Post created successfully",
         imageUrl:
-          "https://lqcnsazbhhkxovvryvfj.supabase.co/storage/v1/object/public/images/uploadedImage",
+          "https://lqcnsazbhhkxovvryvfj.supabase.co/storage/v1/object/public/images/uploadedImage.webp",
       };
       const mockRequest = {
         body: { ...mockPost, technologies: "React,TypeScript" },
