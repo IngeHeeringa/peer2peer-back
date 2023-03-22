@@ -13,6 +13,7 @@ import {
 } from "./postsControllers";
 
 const mockNext = jest.fn() as NextFunction;
+const mockOptimizedImageFile = jest.fn();
 
 beforeEach(() => jest.clearAllMocks());
 
@@ -22,7 +23,7 @@ jest.mock("sharp", () => ({
     resize: jest.fn(() => ({
       webp: jest.fn(() => ({
         toFormat: jest.fn(() => ({
-          toFile: jest.fn(() => "optimizedImageFile"),
+          toFile: jest.fn(() => mockOptimizedImageFile),
         })),
       })),
     })),
@@ -187,7 +188,8 @@ describe("Given a deletePostById controller", () => {
 describe("Given a createPost controller", () => {
   describe("When it receives a response and Post.create returns the created post", () => {
     const file = {
-      filename: "uploadedImage",
+      filename: "test",
+      originalname: "test.png",
     };
 
     const mockPost = {
@@ -231,7 +233,7 @@ describe("Given a createPost controller", () => {
       const expectedResponseBody = {
         message: "Post created successfully",
         imageUrl:
-          "https://lqcnsazbhhkxovvryvfj.supabase.co/storage/v1/object/public/images/uploadedImage.webp",
+          "https://lqcnsazbhhkxovvryvfj.supabase.co/storage/v1/object/public/images/test.webp",
       };
       const mockRequest = {
         body: { ...mockPost, technologies: "React,TypeScript" },

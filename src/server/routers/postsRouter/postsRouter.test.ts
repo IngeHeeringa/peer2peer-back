@@ -1,3 +1,4 @@
+/* eslint-disable max-nested-callbacks */
 import "../../../loadEnvironment";
 import { MongoMemoryServer } from "mongodb-memory-server";
 import mongoose from "mongoose";
@@ -12,15 +13,20 @@ import User from "../../../database/models/User";
 
 beforeEach(() => jest.clearAllMocks());
 
-jest.mock("sharp", () => {
-  const sharpMock = {
-    resize: jest.fn().mockReturnThis(),
-    webp: jest.fn().mockReturnThis(),
-    toFormat: jest.fn().mockReturnThis(),
-    toFile: jest.fn().mockResolvedValueOnce({}),
-  };
-  return jest.fn(() => sharpMock);
-});
+const mockOptimizedImageFile = jest.fn();
+
+jest.mock("sharp", () => ({
+  __esModule: true,
+  default: jest.fn(() => ({
+    resize: jest.fn(() => ({
+      webp: jest.fn(() => ({
+        toFormat: jest.fn(() => ({
+          toFile: jest.fn(() => mockOptimizedImageFile),
+        })),
+      })),
+    })),
+  })),
+}));
 
 let server: MongoMemoryServer;
 
@@ -204,7 +210,7 @@ describe("Given a DELETE '/posts/delete/:id' endpoint", () => {
   });
 });
 
-describe.skip("Given a POST '/posts/submit' endpoint", () => {
+describe("Given a POST '/posts/submit' endpoint", () => {
   const pathCreate = "/posts/submit";
 
   const userData: UserData = {
