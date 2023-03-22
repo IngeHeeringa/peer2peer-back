@@ -96,6 +96,8 @@ export const createPost = async (
       .toFormat("webp")
       .toFile(path.join("uploads", optimizedImageName));
 
+    req.file!.originalname = optimizedImageName;
+
     const backupImage = await fs.readFile(
       path.join("uploads", optimizedImageName)
     );
