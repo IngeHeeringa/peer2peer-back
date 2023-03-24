@@ -4,10 +4,10 @@ Peer2peer is a platform where programmers can connect and organize pair-programm
 
 #### SonarCloud Metrics
 
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=isdi-coders-2023_Inge-Heeringa-Final-Project-back-202301-bcn&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=isdi-coders-2023_Inge-Heeringa-Final-Project-back-202301-bcn)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=isdi-coders-2023_Inge-Heeringa-Final-Project-back-202301-bcn&metric=coverage)](https://sonarcloud.io/summary/new_code?id=isdi-coders-2023_Inge-Heeringa-FinalProject-back-202301-bcn)
-[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=isdi-coders-2023_Inge-Heeringa-Final-Project-back-202301-bcn&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=isdi-coders-2023_Inge-Heeringa-Final-Project-back-202301-bcn)
-[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=isdi-coders-2023_Inge-Heeringa-Final-Project-back-202301-bcn&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=isdi-coders-2023_Inge-Heeringa-Final-Project-back-202301-bcn)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=IngeHeeringa_peer2peer-back&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=IngeHeeringa_peer2peer-back)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=IngeHeeringa_peer2peer-back&metric=coverage)](https://sonarcloud.io/summary/new_code?id=IngeHeeringa_peer2peer-back)
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=IngeHeeringa_peer2peer-back&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=IngeHeeringa_peer2peer-back)
+[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=IngeHeeringa_peer2peer-back&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=IngeHeeringa_peer2peer-back)
 
 This web application is written in TypeScript and built with the MEAN stack. It relies on Angular on the front end, combined with NgRx to ensure a consistent state across various components.
 
@@ -17,7 +17,7 @@ On the backend, I use Node.js with Express and MongoDB to provide a scalable and
 
 My testing suite includes Jest, Supertest and Angular Testing Library to ensure the application is functioning correctly and to instill confidence in my users that they can use the application with minimal risk of encountering bugs or errors.
 
-([Click here to see the front-end code.](https://github.com/isdi-coders-2023/Inge-Heeringa-Final-Project-front-202301-bcn))
+([Click here to see the front-end code.](https://github.com/IngeHeeringa/peer2peer-front))
 
 ![Angular](https://img.shields.io/badge/angular-%23DD0031.svg?style=for-the-badge&logo=angular&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
