@@ -34,6 +34,9 @@ export const postSchema = new Schema(
       type: String,
       required: true,
     },
+    codeRepositoryLink: {
+      type: String,
+    },
     creator: {
       type: String,
     },
