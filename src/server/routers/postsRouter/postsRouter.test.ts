@@ -7,7 +7,11 @@ import crypto from "crypto";
 import jwt from "jsonwebtoken";
 import connectDatabase from "../../../database/connectDatabase.js";
 import Post from "../../../database/models/Post.js";
-import { type PostDataWithId, type UserData } from "../../../database/types.js";
+import {
+  type PostData,
+  type PostDataWithId,
+  type UserData,
+} from "../../../database/types.js";
 import { app } from "../../index.js";
 import User from "../../../database/models/User";
 
@@ -44,7 +48,7 @@ afterEach(async () => {
   await Post.deleteMany();
 });
 
-const posts = [
+const posts: PostData[] = [
   {
     projectTitle: "Mock Project",
     image: "url",
@@ -54,6 +58,7 @@ const posts = [
     stack: "Full Stack",
     technologies: ["Mock", "Test", "Fake"],
     yearsOfExperience: "<1 year",
+    codeRepositoryLink: "http://github.com",
   },
   {
     projectTitle: "Test Project",
@@ -64,6 +69,7 @@ const posts = [
     stack: "Back End",
     technologies: ["Fake", "Test"],
     yearsOfExperience: "1-3 years",
+    codeRepositoryLink: "http://github.com",
   },
 ];
 describe("Given a GET '/posts' endpoint", () => {
